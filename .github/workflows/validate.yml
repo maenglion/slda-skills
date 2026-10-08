@@ -1,0 +1,19 @@
+name: validate
+on: [push, pull_request]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: frontmatter + manifest 일치
+        run: |
+          python3 - <<'PY'
+          import json,re,glob,sys
+          man=json.load(open("manifest.json")); names={s["name"] for s in man["skills"]}
+          disk={d.split("/")[0] for d in glob.glob("slda-*/SKILL.md")}
+          for d in sorted(disk):
+              s=open(f"{d}/SKILL.md",encoding="utf-8").read()
+              assert re.match(r"^---\nname: "+d+r"\n",s), f"{d}: frontmatter name mismatch"
+          assert names==disk, f"manifest≠disk: {names^disk}"
+          d=json.load(open("dispatch.json")); print("ok", len(disk), "skills")
+          PY

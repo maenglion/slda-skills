@@ -25,3 +25,20 @@ Soul Spectrum Inc. · 설계 맹난영 · 엔진 비종속(Claude / GPT / Gemini
 https://raw.githubusercontent.com/maenglion/slda-skills/main/manifest.json
 https://raw.githubusercontent.com/maenglion/slda-skills/main/slda-litigation/SKILL.md
 ```
+
+## 서버 API (다른 사이트 서버 → 여기)
+스킬은 2·3단 자산이라 프론트에 내려가지 않는다. Supabase Edge Function `slda-skills`가 서버 간 키(`x-slda-key`)로만 응답한다.
+
+```
+GET  /slda-skills/manifest
+GET  /slda-skills/skill/slda-litigation
+POST /slda-skills/dispatch   {"mod":"litigation","sources":["소장","준비서면","제출명령"],"output":"html","bundle":true}
+     → {"order":[...], "verdict_mode":"determine", "bundle":"<SKILL.md 연결본>"}
+```
+`/dispatch`가 total_king: 메타로 어떤 자(스킬)를 댈지만 고른다. 채점 값은 건드리지 않는다. 규칙은 `dispatch.json`.
+
+배포:
+```
+supabase secrets set SLDA_API_KEY=... GH_TOKEN=... GH_REPO=maenglion/slda-skills GH_REF=main
+supabase functions deploy slda-skills --no-verify-jwt
+```
