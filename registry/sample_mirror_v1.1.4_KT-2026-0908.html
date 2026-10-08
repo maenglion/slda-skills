@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- SLDA CASE_TYPE: dispute | v1.1.4 인내 잔고 적용 샘플 | case: KT-2026-0908 -->
+<title>SLDA · MIRROR 반감 v1.1.4 (인내 잔고) — 적용 샘플</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<style>
+  :root{
+    --paper:#F6F7F9; --card:#FFFFFF; --ink:#15171C; --ink-2:#2A2F39;
+    --slate:#59616E; --slate-2:#838B97; --hair:#DCE0E6; --hair-2:#EBEEF2;
+    /* 표현강도 램프 (slate → evidence red) */
+    --b0:#6E7681; --b1:#B0843C; --b2:#C2683A; --b3:#A8302C; --b4:#8E1418;
+    --navy:#23304A;
+    --font-serif:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+    --font-sans:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+    --font-mono:'IBM Plex Mono',ui-monospace,'DejaVu Sans Mono',Menlo,'Pretendard',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{background:var(--paper);color:var(--ink);font-family:var(--font-sans);
+       font-weight:400;line-height:1.7;font-size:14px;-webkit-font-smoothing:antialiased}
+  .page{width:210mm;min-height:297mm;background:var(--card);margin:10mm auto;
+        padding:20mm 18mm;position:relative;
+        box-shadow:0 1px 3px rgba(20,23,28,.08),0 8px 30px rgba(20,23,28,.06)}
+  .page + .page{margin-top:10mm}
+  .eyebrow{font-size:11.5px;letter-spacing:.06em;color:var(--b3);font-weight:700}
+  h1,h2,h3{font-family:var(--font-serif);color:var(--ink);font-weight:800;line-height:1.25;letter-spacing:-.01em}
+  .sec-num{font-family:var(--font-mono);font-size:17px;color:var(--b3);font-weight:800;flex:0 0 auto;letter-spacing:.02em}
+  .sec-head{display:flex;align-items:baseline;gap:11px;border-bottom:1.5px solid var(--ink);
+            padding-bottom:10px;margin-bottom:22px}
+  .sec-head h2{font-size:23px;font-weight:800;white-space:nowrap;flex:0 0 auto}
+  p{margin-bottom:12px}
+  strong{font-weight:700;color:var(--ink)}
+  .mono{font-family:var(--font-mono)}
+  .muted{color:var(--slate)}
+
+  /* 표지 */
+  .cover-top{border-top:3px solid var(--ink);padding-top:14px;display:flex;justify-content:space-between;align-items:flex-start}
+  .cover-top .case{font-family:var(--font-mono);font-size:11px;color:var(--ink);letter-spacing:.04em;line-height:1.6}
+  .cover-mark{font-family:var(--font-mono);font-size:10px;letter-spacing:.16em;color:var(--slate);text-transform:uppercase;text-align:right}
+  .cover-hero{margin-top:24px}
+  .cover-hero .kicker{font-family:var(--font-mono);font-size:12px;letter-spacing:.22em;color:var(--b3);text-transform:uppercase;margin-bottom:13px}
+  .cover-hero h1{font-size:38px;line-height:1.14;font-weight:800}
+  .cover-hero h1 .light{color:var(--slate);font-weight:400}
+  .cover-hero .en{font-size:13px;color:var(--slate);margin-top:13px}
+  .cover-grid{display:grid;grid-template-columns:1fr 1fr;border-top:1.5px solid var(--ink);margin-top:26px}
+  .cover-cell{padding:16px 18px 14px 0;border-bottom:1px solid var(--hair)}
+  .cover-cell:nth-child(even){border-left:1px solid var(--hair);padding-left:18px}
+  .cover-cell .h{font-size:12px;font-weight:700;color:var(--b3);margin-bottom:6px}
+  .cover-cell .b{font-size:13px;color:var(--ink-2);line-height:1.65}
+  .cover-foot{border-top:2px solid var(--ink);margin-top:24px;padding-top:14px;
+              display:flex;justify-content:space-between;align-items:flex-end}
+  .cover-foot .who{font-size:12px;color:var(--slate);line-height:1.9}
+  .cover-foot .who b{color:var(--ink);font-weight:700;font-size:13.5px}
+  .cover-foot .note{text-align:right;font-size:11.5px;color:var(--b4);font-weight:700;line-height:1.6}
+
+  /* 강도 척도 */
+  .scale{margin:8px 0 16px}
+  .scale-h{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.08em;color:var(--b3);font-weight:700;margin-bottom:7px}
+  .scale-bar{display:flex;border-radius:3px;overflow:hidden}
+  .scale-bar .seg{flex:1;color:#fff;font-size:10px;padding:6px 8px;line-height:1.35;font-family:var(--font-mono)}
+  .scale-bar .seg b{display:block;font-size:11px}
+
+  .chart-wrap{border:1px solid var(--hair);background:#FCFCFD;padding:22px 20px 14px;margin:8px 0 20px}
+  .legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px;font-family:var(--font-mono);font-size:10px;color:var(--slate)}
+  .legend .it{display:flex;align-items:center;gap:6px}
+  .legend .sw{width:11px;height:11px;border-radius:2px;display:inline-block}
+
+  /* 표 */
+  table{width:100%;border-collapse:collapse;font-size:12.5px;margin:6px 0 18px}
+  th{font-family:var(--font-mono);font-size:10px;letter-spacing:.06em;color:var(--slate);
+     text-transform:uppercase;text-align:left;padding:8px 10px;border-bottom:1.5px solid var(--ink)}
+  td{padding:9px 10px;border-bottom:1px solid var(--hair-2);vertical-align:top;line-height:1.55}
+  tbody tr:hover{background:#FAFBFC}
+  .side-pill{font-family:var(--font-mono);font-size:9.5px;padding:2px 7px;border-radius:2px;letter-spacing:.04em;font-weight:600;white-space:nowrap}
+  .side-N{background:#E9EEF6;color:#23304A}
+  .side-J{background:#FBEAEA;color:#8E1418}
+  .sbadge{font-family:var(--font-mono);font-size:10.5px;font-weight:600;color:#fff;
+          padding:2px 7px;border-radius:2px;display:inline-block;min-width:30px;text-align:center}
+  .grade{font-family:var(--font-mono);font-size:10px;font-weight:700;padding:2px 7px;border-radius:2px;display:inline-block}
+  .gA{background:#EAF1EC;color:#2C5238}
+  .gB{background:#FDF3E4;color:#8A5A12}
+  .gC{background:#FBEAEA;color:#8E1418}
+
+  .draft-flag{display:inline-block;font-family:var(--font-mono);font-size:10px;
+              letter-spacing:.1em;text-transform:uppercase;background:#FFF6E6;
+              color:#946200;border:1px solid #E8D3A0;padding:3px 9px;border-radius:2px;margin-bottom:16px}
+  .alert{border:1px solid var(--b3);background:#FCF3F2;padding:16px 18px;margin-top:14px;border-radius:3px}
+  .alert .h{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+            color:var(--b3);font-weight:600;margin-bottom:8px}
+  .noteb{border:1px solid var(--hair);background:#FAFBFC;padding:14px 16px;margin:10px 0 16px;border-radius:3px;font-size:12.5px;color:var(--ink-2)}
+  .noteb .h{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+            color:var(--slate);font-weight:700;margin-bottom:6px}
+
+  /* claim 카드 */
+  .pc{border:1px solid var(--hair);border-radius:3px;margin-bottom:10px;break-inside:avoid;overflow:hidden}
+  .pc-head{background:#F4F5F7;padding:11px 15px;border-bottom:1px solid var(--hair);display:flex;align-items:center;gap:12px}
+  .pc-id{font-family:var(--font-mono);font-size:12px;font-weight:700;color:var(--b3)}
+  .pc-issue{font-size:12.5px;color:var(--slate)}
+  .pc-body{padding:12px 15px 4px}
+  .prem{display:flex;gap:12px;margin-bottom:9px}
+  .prem .lab{flex:0 0 70px;font-family:var(--font-mono);font-size:10px;color:var(--slate);padding-top:3px;letter-spacing:.04em}
+  .prem .q{flex:1;font-size:12.5px;color:var(--ink-2);border-left:2px solid var(--hair);padding-left:12px;line-height:1.55}
+  .prem .q .meta{font-family:var(--font-mono);font-size:9.5px;color:var(--slate);display:block;margin-bottom:3px}
+
+  .foot{position:absolute;left:18mm;right:18mm;bottom:12mm;display:flex;justify-content:space-between;
+        font-family:var(--font-mono);font-size:9.5px;color:var(--slate-2);border-top:1px solid var(--hair);padding-top:6px}
+  @media print{body{background:#fff}.page{margin:0;box-shadow:none;page-break-after:always}}
+</style>
+<style>
+ .bal{font-family:var(--font-mono);font-weight:700}
+ .bneg{color:#8E1418}.bhalf{color:#8A5A12}
+</style>
+</head>
+<body>
+<section class="page">
+  <div class="cover-top">
+    <div class="case">PAIR: 맹난영(A) – 정민하(B) · CASE: KT-2026-0908 · DISPUTE<br>규칙: <b>MIRROR 반감 v1.1.4 — 인내 잔고</b> · issue_thread: AI_COMPETENCE_DEVALUATION (개방 2025-01 · 폐쇄 2026-09-08 관계종결) · 평가차원: COMPETENCE_CREDIT · 기능계열: DEVALUE_BY_TOOL_SUBSTITUTION</div>
+    <div class="cover-mark">SLDA · 적용 샘플<br>SOUL SPECTRUM INC.</div>
+  </div>
+
+  <div class="sec-head" style="margin-top:22px"><span class="sec-num">TB.</span><h2>인내 잔고 — 시계열 적립·소진 원장</h2></div>
+  <p class="muted" style="font-size:12.5px">산식: 잔고 = Σ(상대 −부호 × 지칭확실성 가중), 동일 개념·국면 내 유효, 확실성 0은 적립 불가(승급 대기). 반사는 잔고 한도까지 ×0.5, 초과분 전액. 채널 병합 시계열(카톡·통화·마누스 질의문) 기준.</p>
+
+  <table>
+    <thead><tr><th style="width:14%">시점</th><th style="width:10%">행위</th><th>문면 (축약)</th><th style="width:8%">부호</th><th style="width:9%">확실성</th><th style="width:11%">적립/차감</th><th style="width:10%">잔고</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">2025.01~</td><td><span class="side-pill side-J">B 타격</span></td><td>"왜 니가 AI인지 모르겠어, LLM으로 개발하면 AI야?" (B 사과문 자기 인용으로 보강)</td><td class="mono">−2</td><td class="mono">4 ×0.8</td><td class="bal">+1.6 적립</td><td class="bal">1.6</td></tr>
+      <tr><td class="mono">~2026.08</td><td><span class="side-pill side-J">B 타격</span></td><td>동종 반복분 ("매달 1회 이상" — 패턴 주장, 대응 사건 존재)</td><td class="mono">−2</td><td class="mono">2 ×0.4</td><td class="bal">+0.8 적립</td><td class="bal">2.4</td></tr>
+      <tr><td class="mono">09.07 16:06</td><td><span class="side-pill side-J">B 타격</span></td><td>"이거나 받아서 네 AI들에게 돌려봐"</td><td class="mono">−2</td><td class="mono">5 ×1.0</td><td class="bal">+2.0 적립</td><td class="bal">4.4</td></tr>
+      <tr><td class="mono">09.07 야간</td><td><span class="side-pill side-J">B 타격</span></td><td>"마누스가 했지 니가 했냐" · 포크레인 질의문(문면)</td><td class="mono">−2</td><td class="mono">5 ×1.0</td><td class="bal">+2.0 적립</td><td class="bal">6.4</td></tr>
+      <tr><td class="mono">09.08</td><td><span class="side-pill side-J">B 타격</span></td><td>"건국이는 한 줄 한 줄 다 친다" (검증 결과 허위)</td><td class="mono">−2</td><td class="mono">5 ×1.0</td><td class="bal">+2.0 적립</td><td class="bal">8.4</td></tr>
+      <tr style="background:#FCF8F2"><td class="mono">09.08 22:40</td><td><span class="side-pill side-N">A 반사</span></td><td>"마누스로 해서 잘한 거라며 ㅋㅋ" (조롱 재인용) — MIRROR ✓ · 잔고 내</td><td class="mono">−1</td><td class="mono">5</td><td class="bal bhalf">×0.5 → −0.5</td><td class="bal">7.4</td></tr>
+      <tr style="background:#FCF8F2"><td class="mono">09.08 22:56</td><td><span class="side-pill side-N">A 반사</span></td><td>"넌 그냥 AI에 입력해주는 전무님" — MIRROR ✓ · 잔고 내(7.4≥2)</td><td class="mono">−2</td><td class="mono">5</td><td class="bal bhalf">×0.5 → −1.0</td><td class="bal">5.4</td></tr>
+      <tr><td class="mono">국면 종결</td><td colspan="5">잔여 잔고 5.4 — issue_thread 폐쇄(관계 종결)와 함께 소멸(원장에 기록만 보존, 이월 금지)</td><td class="bal muted">0</td></tr>
+    </tbody>
+  </table>
+  <p class="muted" style="font-size:11px">정렬 기준: sequence_index(병합 실순서). 적립/차감 열은 balance_delta(+적립/−차감), 원발화 부정값은 부호 열 유지. 개념 규율: A의 학점·지능·사생활 계열은 타 개념(인신 일반)이라 이 잔고 차입 불가 — 전액 유지. B "그런 면에선 너도 쓰레기지"는 인신 일반 개념에서 별도 잔고 판정(A 선행 타격 존재 → MIRROR ×0.5, 대칭 적용).</p>
+
+  <div class="sec-head" style="margin-top:20px"><span class="sec-num">Σ.</span><h2>⑥ 존엄·강도 절제 — 3열 합산</h2></div>
+  <div class="draft-flag">⑥축 환산 = v1.1.4 잠정 구간표 · 표본 10건 후 캘리브레이션 예정</div>
+  <div class="noteb">환산 규칙(93 §5): |반감 적용값| 0→10 · ≤3→8 · ≤8→6 · ≤15→4 · ≤25→3 · &gt;25→2. 3열 규칙(93 §6): <b>‘MIRROR 제외’ 열은 비교용 극단값이며 최종 점수로 사용하지 않는다.</b> 최종은 ‘반감 적용’ 열이다.</div>
+  <table>
+    <thead><tr><th>화자</th><th style="width:16%">전체 (원값)</th><th style="width:20%">MIRROR 제외 <span class="muted">[비교용]</span></th><th style="width:22%">반감 적용 (v1.1.4) <span class="muted">[최종]</span></th><th>판독</th></tr></thead>
+    <tbody>
+      <tr><td><span class="side-pill side-N">A 맹난영</span></td><td class="mono">−34 (17+건)</td><td class="mono">−31 (미러 3건 제외)</td><td class="mono"><b>−32.5</b> · ⑥ 2</td><td>반감 수혜 −1.5 (원값 −34 → −32.5) — 대부분 타 개념·연쇄·상당성 초과로 전액 유지. <b>⑥ 구간 불변</b>(원값·제외·반감 모두 &gt;25 → 2)</td></tr>
+      <tr><td><span class="side-pill side-J">B 정민하</span></td><td class="mono">−14 (7+건)</td><td class="mono">−12 (미러 1건 제외)</td><td class="mono"><b>−13</b> · ⑥ 4</td><td>"너도 쓰레기지" 1건 반감 −1 (원값 −14 → −13) — 대칭 적용 확인. <b>⑥ 구간 불변</b>(세 열 모두 ≤15 → 4)</td></tr>
+    </tbody>
+  </table>
+  <div class="alert"><div class="h">자동 소견</div>
+  인내 잔고 모델은 시점 가중을 내장한다 — A의 AI_TOOL_USE 반사가 반값이 되는 이유는 "되받아서"가 아니라 <b>2025.01부터 8.4점의 확실성 가중 잔고를 적립하는 동안 반사하지 않았기 때문</b>이다(R-12 실측과 정합: P1 2인칭 밀도 1.1). 반면 잔고 없는 즉시 반사·타 개념 차입·잔고 초과분은 전액 — 규칙은 절제를 보상하되 보복을 면허하지 않으며, 양측에 대칭 적용된다. 애매 발화(확실성 0~2)는 잔고 기여가 0~40%로 제한되어 "참았다" 주장의 자기 채점 인플레를 차단한다.</div>
+  <div class="foot"><span>SLDA · v1.1.4 인내 잔고 · 적용 샘플</span><span>KT-2026-0908</span></div>
+</section>
+</body>
+</html>

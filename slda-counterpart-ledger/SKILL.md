@@ -105,3 +105,6 @@ slda-core → slda-counterpart-ledger (S0: agreements·red_lines·open_items·re
 - [ ] 모든 count == evidence 링크 수
 - [ ] other_ai 출처 항목에 provenance 표기
 - [ ] shareable 판에 상대가 반박 못 할 문장이 아니라 **상대가 확인할 수 있는** 문장만 있는가
+
+## 루브릭 매핑
+R-10 동일지칭 기능·부호(references/R-10_same_referent_function_polarity_v1.1.md) — 원장 A표 = 사전확률 S0, 인스턴스 기능부호 −2~+2 × 지칭확실성 0.2~1.0, stance_holder로 인용/채택 분리, 조기 합산 금지. R-06 REFERENT_STANDING(references/REFERENT_STANDING_v0.1.md) — 사건 사전은 정의·시기만, 당위성은 상대 반응 이력(ACK+2/NOC+1/OBJ-E+0.5/OBJ-S−2)으로. 4모델 공용 허브: R-05·R-06·R-11·R-13에 산출 전달.

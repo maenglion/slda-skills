@@ -143,3 +143,6 @@ description: SLDA(Semantic Logic Drift Analysis, 의미·논리 드리프트 분
 3. `stance`(ai-invocation) ↔ `INVOKE_MODE`(core) 통합 — 현재 규칙: INVOKE_MODE가 상위, stance는 하위태그.
 4. 명명 `Semantic Litigation` → `Semantic Logic` 통일 (약칭 SLDA 유지).
 5. litigation 레거시 §8.1 "결론 먼저"·§8.5 "소결문 자동생성"을 observe 규율로 소급할지.
+
+## 루브릭 레지스트리
+공식 기능 목록 = `rubrics.json` / `registry/rubric_registry_v1.1.md` (R-01~R-13). core 소속: R-01 표현강도 · R-02 주체귀속 · R-07 발화 부인 · R-08 검증 이벤트. total_king(`dispatch.json`)은 모듈·오버레이·R-코드를 **배치**만 하고 값은 루브릭이 결정적으로 낸다 — CBT 20건 동안 설계자가 배치를 대행·검증.

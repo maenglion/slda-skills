@@ -1,31 +1,99 @@
 {
   "_doc": "total_king 라우팅 규칙. 입력 메타(mod · 자료 유형 · 신호)로 어떤 자(스킬)를 댈지 고른다. 점수는 건드리지 않는다. 규칙은 결정적 — 같은 메타면 같은 배치.",
-  "version": "1.4.0",
-  "always_first": ["slda-core"],
+  "version": "1.5.0",
+  "always_first": [
+    "slda-core"
+  ],
   "context": {
     "case_index": "slda-case-index",
-    "counterpart_ledger": {"skill": "slda-counterpart-ledger", "when": "pair_id != null"}
+    "counterpart_ledger": {
+      "skill": "slda-counterpart-ledger",
+      "when": "pair_id != null"
+    }
   },
   "preprocess": [
-    {"skill": "slda-transcript", "when": "sources contains call|audio|stt"}
+    {
+      "skill": "slda-transcript",
+      "when": "sources contains call|audio|stt"
+    }
   ],
   "modules": {
     "litigation": {
       "skill": "slda-litigation",
-      "match": {"mod": "litigation", "sources_any": ["서면", "소장", "준비서면", "답변서", "brief"]},
+      "match": {
+        "mod": "litigation",
+        "sources_any": [
+          "서면",
+          "소장",
+          "준비서면",
+          "답변서",
+          "brief"
+        ]
+      },
       "verdict_mode": "determine",
       "sub": [
-        {"skill": "slda-inquiry", "when": "sources contains 신청서|제출명령|사실조회|과세정보|금융거래"}
+        {
+          "skill": "slda-inquiry",
+          "when": "sources contains 신청서|제출명령|사실조회|과세정보|금융거래"
+        }
       ]
     },
-    "controversy": {"skill": "slda-controversy", "match": {"mod": "controversy"}, "verdict_mode": "rank"},
-    "dispute":     {"skill": "slda-dispute",     "match": {"mod": "dispute"},     "verdict_mode": "determine"},
-    "inquiry":     {"skill": "slda-inquiry",     "match": {"mod": "inquiry"},     "verdict_mode": "determine"}
+    "controversy": {
+      "skill": "slda-controversy",
+      "match": {
+        "mod": "controversy"
+      },
+      "verdict_mode": "rank"
+    },
+    "dispute": {
+      "skill": "slda-dispute",
+      "match": {
+        "mod": "dispute"
+      },
+      "verdict_mode": "determine"
+    },
+    "inquiry": {
+      "skill": "slda-inquiry",
+      "match": {
+        "mod": "inquiry"
+      },
+      "verdict_mode": "determine"
+    }
   },
   "overlays": [
-    {"skill": "slda-ai-invocation",  "when": "signals contains ai_mention", "modules": ["controversy", "dispute"]},
-    {"skill": "slda-stylistic-drift", "when": "flags contains style", "verdict_mode_force": "observe"}
+    {
+      "skill": "slda-probe",
+      "when": "signals contains probe|repeat_question|silence",
+      "modules": [
+        "dispute",
+        "controversy",
+        "litigation"
+      ]
+    },
+    {
+      "skill": "slda-ai-invocation",
+      "when": "signals contains ai_mention",
+      "modules": [
+        "controversy",
+        "dispute"
+      ]
+    },
+    {
+      "skill": "slda-stylistic-drift",
+      "when": "flags contains style",
+      "verdict_mode_force": "observe"
+    }
   ],
-  "render": {"skill": "slda-report-html", "when": "output == html|pdf"},
-  "human_cbt": "CBT 구간(20건)에서는 설계자가 이 배치를 확인·수정할 수 있다. 수정은 배치(어떤 자)만, 값(채점)은 불가."
+  "render": {
+    "skill": "slda-report-html",
+    "when": "output == html|pdf"
+  },
+  "human_cbt": "CBT 구간(20건)에서는 설계자가 이 배치를 확인·수정할 수 있다. 수정은 배치(어떤 자)만, 값(채점)은 불가.",
+  "rubrics": "rubrics.json의 by_module + overlay_rubrics로 배치된 스킬의 R-코드를 산출. total_king은 R-코드 목록을 확정할 뿐 값을 내지 않는다.",
+  "preprocess_directive": {
+    "litigation": "preprocess/directive_litigation_v1.md",
+    "controversy": "preprocess/directive_controversy_v1.md",
+    "speaker": "preprocess/directive_speaker_v1.md",
+    "_doc": "1단 유저 프롬프트(라벨화·마스킹·병합만). SPEC §14.4: 접수 세션 유저에게 Edge Function으로 발급, 프론트 하드코딩 금지"
+  }
 }

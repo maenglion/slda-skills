@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- SLDA CASE_TYPE: dispute | 표시규격 샘플: slda-probe 섹션 | version: 0.1 -->
+<title>SLDA · Dispute 표시규격 — 프로브 검출 섹션 v0.1</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<style>
+  :root{
+    --paper:#F6F7F9; --card:#FFFFFF; --ink:#15171C; --ink-2:#2A2F39;
+    --slate:#59616E; --slate-2:#838B97; --hair:#DCE0E6; --hair-2:#EBEEF2;
+    /* 표현강도 램프 (slate → evidence red) */
+    --b0:#6E7681; --b1:#B0843C; --b2:#C2683A; --b3:#A8302C; --b4:#8E1418;
+    --navy:#23304A;
+    --font-serif:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+    --font-sans:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+    --font-mono:'IBM Plex Mono',ui-monospace,'DejaVu Sans Mono',Menlo,'Pretendard',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{background:var(--paper);color:var(--ink);font-family:var(--font-sans);
+       font-weight:400;line-height:1.7;font-size:14px;-webkit-font-smoothing:antialiased}
+  .page{width:210mm;min-height:297mm;background:var(--card);margin:10mm auto;
+        padding:20mm 18mm;position:relative;
+        box-shadow:0 1px 3px rgba(20,23,28,.08),0 8px 30px rgba(20,23,28,.06)}
+  .page + .page{margin-top:10mm}
+  .eyebrow{font-size:11.5px;letter-spacing:.06em;color:var(--b3);font-weight:700}
+  h1,h2,h3{font-family:var(--font-serif);color:var(--ink);font-weight:800;line-height:1.25;letter-spacing:-.01em}
+  .sec-num{font-family:var(--font-mono);font-size:17px;color:var(--b3);font-weight:800;flex:0 0 auto;letter-spacing:.02em}
+  .sec-head{display:flex;align-items:baseline;gap:11px;border-bottom:1.5px solid var(--ink);
+            padding-bottom:10px;margin-bottom:22px}
+  .sec-head h2{font-size:23px;font-weight:800;white-space:nowrap;flex:0 0 auto}
+  p{margin-bottom:12px}
+  strong{font-weight:700;color:var(--ink)}
+  .mono{font-family:var(--font-mono)}
+  .muted{color:var(--slate)}
+
+  /* 표지 */
+  .cover-top{border-top:3px solid var(--ink);padding-top:14px;display:flex;justify-content:space-between;align-items:flex-start}
+  .cover-top .case{font-family:var(--font-mono);font-size:11px;color:var(--ink);letter-spacing:.04em;line-height:1.6}
+  .cover-mark{font-family:var(--font-mono);font-size:10px;letter-spacing:.16em;color:var(--slate);text-transform:uppercase;text-align:right}
+  .cover-hero{margin-top:24px}
+  .cover-hero .kicker{font-family:var(--font-mono);font-size:12px;letter-spacing:.22em;color:var(--b3);text-transform:uppercase;margin-bottom:13px}
+  .cover-hero h1{font-size:38px;line-height:1.14;font-weight:800}
+  .cover-hero h1 .light{color:var(--slate);font-weight:400}
+  .cover-hero .en{font-size:13px;color:var(--slate);margin-top:13px}
+  .cover-grid{display:grid;grid-template-columns:1fr 1fr;border-top:1.5px solid var(--ink);margin-top:26px}
+  .cover-cell{padding:16px 18px 14px 0;border-bottom:1px solid var(--hair)}
+  .cover-cell:nth-child(even){border-left:1px solid var(--hair);padding-left:18px}
+  .cover-cell .h{font-size:12px;font-weight:700;color:var(--b3);margin-bottom:6px}
+  .cover-cell .b{font-size:13px;color:var(--ink-2);line-height:1.65}
+  .cover-foot{border-top:2px solid var(--ink);margin-top:24px;padding-top:14px;
+              display:flex;justify-content:space-between;align-items:flex-end}
+  .cover-foot .who{font-size:12px;color:var(--slate);line-height:1.9}
+  .cover-foot .who b{color:var(--ink);font-weight:700;font-size:13.5px}
+  .cover-foot .note{text-align:right;font-size:11.5px;color:var(--b4);font-weight:700;line-height:1.6}
+
+  /* 강도 척도 */
+  .scale{margin:8px 0 16px}
+  .scale-h{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.08em;color:var(--b3);font-weight:700;margin-bottom:7px}
+  .scale-bar{display:flex;border-radius:3px;overflow:hidden}
+  .scale-bar .seg{flex:1;color:#fff;font-size:10px;padding:6px 8px;line-height:1.35;font-family:var(--font-mono)}
+  .scale-bar .seg b{display:block;font-size:11px}
+
+  .chart-wrap{border:1px solid var(--hair);background:#FCFCFD;padding:22px 20px 14px;margin:8px 0 20px}
+  .legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px;font-family:var(--font-mono);font-size:10px;color:var(--slate)}
+  .legend .it{display:flex;align-items:center;gap:6px}
+  .legend .sw{width:11px;height:11px;border-radius:2px;display:inline-block}
+
+  /* 표 */
+  table{width:100%;border-collapse:collapse;font-size:12.5px;margin:6px 0 18px}
+  th{font-family:var(--font-mono);font-size:10px;letter-spacing:.06em;color:var(--slate);
+     text-transform:uppercase;text-align:left;padding:8px 10px;border-bottom:1.5px solid var(--ink)}
+  td{padding:9px 10px;border-bottom:1px solid var(--hair-2);vertical-align:top;line-height:1.55}
+  tbody tr:hover{background:#FAFBFC}
+  .side-pill{font-family:var(--font-mono);font-size:9.5px;padding:2px 7px;border-radius:2px;letter-spacing:.04em;font-weight:600;white-space:nowrap}
+  .side-N{background:#E9EEF6;color:#23304A}
+  .side-J{background:#FBEAEA;color:#8E1418}
+  .sbadge{font-family:var(--font-mono);font-size:10.5px;font-weight:600;color:#fff;
+          padding:2px 7px;border-radius:2px;display:inline-block;min-width:30px;text-align:center}
+  .grade{font-family:var(--font-mono);font-size:10px;font-weight:700;padding:2px 7px;border-radius:2px;display:inline-block}
+  .gA{background:#EAF1EC;color:#2C5238}
+  .gB{background:#FDF3E4;color:#8A5A12}
+  .gC{background:#FBEAEA;color:#8E1418}
+
+  .alert{border:1px solid var(--b3);background:#FCF3F2;padding:16px 18px;margin-top:14px;border-radius:3px}
+  .alert .h{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+            color:var(--b3);font-weight:600;margin-bottom:8px}
+  .noteb{border:1px solid var(--hair);background:#FAFBFC;padding:14px 16px;margin:10px 0 16px;border-radius:3px;font-size:12.5px;color:var(--ink-2)}
+  .noteb .h{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+            color:var(--slate);font-weight:700;margin-bottom:6px}
+
+  /* claim 카드 */
+  .pc{border:1px solid var(--hair);border-radius:3px;margin-bottom:10px;break-inside:avoid;overflow:hidden}
+  .pc-head{background:#F4F5F7;padding:11px 15px;border-bottom:1px solid var(--hair);display:flex;align-items:center;gap:12px}
+  .pc-id{font-family:var(--font-mono);font-size:12px;font-weight:700;color:var(--b3)}
+  .pc-issue{font-size:12.5px;color:var(--slate)}
+  .pc-body{padding:12px 15px 4px}
+  .prem{display:flex;gap:12px;margin-bottom:9px}
+  .prem .lab{flex:0 0 70px;font-family:var(--font-mono);font-size:10px;color:var(--slate);padding-top:3px;letter-spacing:.04em}
+  .prem .q{flex:1;font-size:12.5px;color:var(--ink-2);border-left:2px solid var(--hair);padding-left:12px;line-height:1.55}
+  .prem .q .meta{font-family:var(--font-mono);font-size:9.5px;color:var(--slate);display:block;margin-bottom:3px}
+
+  .foot{position:absolute;left:18mm;right:18mm;bottom:12mm;display:flex;justify-content:space-between;
+        font-family:var(--font-mono);font-size:9.5px;color:var(--slate-2);border-top:1px solid var(--hair);padding-top:6px}
+  @media print{body{background:#fff}.page{margin:0;box-shadow:none;page-break-after:always}}
+</style>
+<style>
+ .rc{font-family:var(--font-mono);font-size:10px;font-weight:700;padding:2px 8px;border-radius:2px;display:inline-block}
+ .rc-ans{background:#EAF1EC;color:#2C5238}.rc-def{background:#FDF3E4;color:#8A5A12}.rc-sil{background:#F0F1F3;color:#6E7681;border:1px dashed #B7BCC4}
+ .flag{font-family:var(--font-mono);font-size:11px;font-weight:800;color:#fff;padding:4px 10px;border-radius:2px;letter-spacing:.04em}
+ .flag-ev{background:var(--b3)}.flag-kd{background:var(--b4)}
+ .probe-strip{display:flex;align-items:center;gap:0;margin:14px 0 6px}
+ .probe-node{flex:0 0 auto;text-align:center;width:118px}
+ .probe-node .dot{width:14px;height:14px;border-radius:50%;margin:0 auto 5px}
+ .probe-node .lb{font-family:var(--font-mono);font-size:9px;color:var(--slate);line-height:1.4}
+ .probe-link{flex:1;height:2px;background:var(--hair)}
+</style>
+</head>
+<body>
+<section class="page">
+  <!-- ① Dispute 표지 스트립: litigation 표지의 제목 규약 변경분 -->
+  <div class="cover-top">
+    <div class="case">PAIR: 맹난영 – 정민하<br>CASE: KT-2026-0908 · <b>DISPUTE (1:1 분쟁)</b></div>
+    <div class="cover-mark">SLDA · V0.2<br>SOUL SPECTRUM INC.</div>
+  </div>
+  <div class="cover-hero" style="margin-top:16px">
+    <div class="kicker">SEMANTIC LOGIC DRIFT ANALYSIS · DISPUTE</div>
+    <h1 style="font-size:28px">의미·논리 드리프트 분석 <span class="light">· 1:1 분쟁</span></h1>
+    <div class="en">당사자 간 교신(통화·메신저·서면)의 청구단위·검증·회피 분석 — 원고/피고 아닌 당사자 A/B 표기</div>
+  </div>
+
+  <!-- ② 프로브 검출 섹션 본체 -->
+  <div class="sec-head" style="margin-top:26px"><span class="sec-num">P.</span><h2>프로브 검출 — 반복 자극·응답 분류</h2></div>
+
+  <div class="pc">
+    <div class="pc-head">
+      <span class="pc-id">PROBE-01</span>
+      <span class="pc-issue">명제 핵: "상대 본인의 클로드 견적도 당사자 산정과 유사했다" · 앵커링: <b>상대 신뢰 채널(본인 도구)</b></span>
+    </div>
+    <div class="pc-body">
+      <table style="margin:2px 0 10px">
+        <thead><tr><th style="width:8%">회차</th><th style="width:16%">시각·채널</th><th>자극 문면 (축약)</th><th style="width:14%">반응</th><th style="width:20%">반응 문면</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">1</td><td class="mono">00:52통화 19:52</td><td>"그걸 확인하고 외주비랑 다 확인을 하셨대"</td><td><span class="rc rc-sil">SILENCE</span></td><td class="muted">직후 블록 동일 화자 — 무응답</td></tr>
+          <tr><td class="mono">2</td><td class="mono">00:52통화 20:01</td><td>"GPT 뭐래? 960 · 보수적으로 800"</td><td><span class="rc rc-def">DEFLECT</span></td><td>"말이 안 되시고, 바람 불어넣어"(20:10) — 수치 미참조</td></tr>
+          <tr><td class="mono">3</td><td class="mono">09.09 카톡 3:11</td><td>"니 클로드에 넣었을 때도 견적 비슷했다고 했잖아 (3회 이상 반복)"</td><td><span class="rc rc-sil">SILENCE</span></td><td class="muted">명제 핵 무응답 지속</td></tr>
+        </tbody>
+      </table>
+
+      <div class="probe-strip">
+        <div class="probe-node"><div class="dot" style="background:#B7BCC4;border:2px dashed #6E7681"></div><div class="lb">1회차<br>침묵</div></div>
+        <div class="probe-link"></div>
+        <div class="probe-node"><div class="dot" style="background:#B0843C"></div><div class="lb">2회차<br>이탈</div></div>
+        <div class="probe-link"></div>
+        <div class="probe-node"><div class="dot" style="background:#B7BCC4;border:2px dashed #6E7681"></div><div class="lb">3회차<br>침묵</div></div>
+        <div class="probe-link" style="background:var(--b4)"></div>
+        <div class="probe-node"><div class="dot" style="background:#8E1418"></div><div class="lb">02:03 반대 단정<br>"1200보단 훨씬 적을 것"</div></div>
+      </div>
+
+      <div style="display:flex;gap:10px;align-items:center;margin:12px 0 6px">
+        <span class="flag flag-ev">EVASION_CONFIRMED · 3/3</span>
+        <span class="flag flag-kd">KNOWN_DENIAL</span>
+        <span class="muted" style="font-size:11.5px">회피율 100% (silence 2 · deflect 1 · answer 0) + 동일 명제 반대 단정 존재</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert">
+    <div class="h">자동 소견 (인사이트 출력 형식)</div>
+    당사자 A는 검증 가능한 동일 명제를 3회차·2채널에 걸쳐 제시했고, 당사자 B의 명제 핵 응답은 0회다. 자극이 B 본인의 신뢰 도구(클로드)를 지시하므로 "상대 도구 편향" 해석은 배제된다. 이후 B가 동일 명제에 반대 방향 단정을 발화함에 따라 <strong>인지 후 부인(KNOWN_DENIAL)</strong>이 성립하며, 이는 §강도·§축이동 판정과 결합해 "합의 구간을 인지한 상태의 하향 협상"으로 등재된다. <span class="muted">— 침묵의 동기는 산출하지 않는다.</span>
+  </div>
+  <p class="muted" style="font-size:11.5px">활용처: dispute — 협상 전 상대 인지 상태 확정 · litigation — 석명 회피 원장, 문서제출명령 필요성 소명 · §35 — 기관 무응답 카운트(§62 진정 정량 근거)</p>
+
+  <div class="foot"><span>SLDA · 표시규격 · slda-probe v0.1</span><span>DISPUTE 템플릿 샘플</span></div>
+</section>
+</body>
+</html>

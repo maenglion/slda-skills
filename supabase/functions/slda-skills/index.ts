@@ -29,6 +29,7 @@ function dispatch(d: any, m: { mod: string; sources?: string[]; signals?: string
   order.push(mod.skill);
   for (const s of mod.sub ?? []) if (has(m.sources, "신청서|제출명령|사실조회|과세정보|금융거래")) order.push(s.skill);
   if (has(m.signals, "ai_mention") && ["controversy", "dispute"].includes(m.mod)) order.push("slda-ai-invocation");
+  if (has(m.signals, "probe|repeat_question|silence")) order.push("slda-probe");
   if (has(m.flags, "style")) order.push("slda-stylistic-drift");
   if (/^(html|pdf)$/i.test(m.output ?? "")) order.push("slda-report-html");
   return { order: [...new Set(order)], verdict_mode: mod.verdict_mode };
@@ -41,12 +42,17 @@ serve(async (req) => {
     if (p === "/manifest") return new Response(await raw("manifest.json"), { headers: { "content-type": "application/json" } });
     const m = p.match(/^\/skill\/(slda-[a-z-]+)$/);
     if (m) return new Response(await raw(`${m[1]}/SKILL.md`), { headers: { "content-type": "text/markdown; charset=utf-8" } });
+    const dm = p.match(/^\/directive\/(litigation|controversy|speaker)$/);   // 1단 유저 프롬프트 발급 (SPEC §14.4)
+    if (dm) return new Response(await raw(`preprocess/directive_${dm[1]}_v1.md`), { headers: { "content-type": "text/markdown; charset=utf-8", "x-slda-directive-version": "v1" } });
+    if (p === "/rubrics") return new Response(await raw("rubrics.json"), { headers: { "content-type": "application/json" } });
     if (p === "/dispatch" && req.method === "POST") {
-      const meta = await req.json(); const d = JSON.parse(await raw("dispatch.json"));
+      const meta = await req.json(); const d = JSON.parse(await raw("dispatch.json")); const R = JSON.parse(await raw("rubrics.json"));
       const plan = dispatch(d, meta);
+      const rubrics = [...new Set([...(R.by_module[meta.mod] ?? []), ...plan.order.flatMap((s: string) => R.overlay_rubrics[s] ?? [])])].sort();
+      (plan as any).rubrics = rubrics;
       const bundle = meta.bundle ? (await Promise.all(plan.order.map(s => raw(`${s}/SKILL.md`)))).join("\n\n---\n\n") : undefined;
       return json({ ...plan, dispatch_version: d.version, bundle });
     }
-    return json({ error: "not found", routes: ["GET /manifest", "GET /skill/:name", "POST /dispatch {mod,sources,signals,flags,pair_id,output,bundle}"] }, 404);
+    return json({ error: "not found", routes: ["GET /manifest", "GET /rubrics", "GET /skill/:name", "GET /directive/:model", "POST /dispatch {mod,sources,signals,flags,pair_id,output,bundle}"] }, 404);
   } catch (e) { return json({ error: String(e) }, 500); }
 });

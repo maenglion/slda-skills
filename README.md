@@ -11,12 +11,15 @@ Soul Spectrum Inc. · 설계 맹난영 · 엔진 비종속(Claude / GPT / Gemini
 | slda-inquiry | module | 증거신청·정보조회 확장 — 결합 단위·침해 강도축·D-01~05 |
 | slda-controversy | module | SNS 다자 논쟁 — 게이트·E1–E6·후퇴 벡터·PC |
 | slda-dispute | module | 1:1 계약·외주 분쟁 — 청구단위 원장·객체 계층·의도/전달·적대검증 |
+| slda-probe | overlay | R-05 프로브 검출 — answer/deflect/silence · EVASION_CONFIRMED · KNOWN_DENIAL |
 | slda-ai-invocation | overlay | §C3 AI 원용 7신호·INVOKE_MODE |
 | slda-stylistic-drift | overlay | §6.5 어투 지표 6종 (observe 고정) |
 | slda-transcript | preprocess | 통화 STT 전처리 — 호칭 앵커·교정 대조표·귀속 등급 |
 | slda-counterpart-ledger | context | 쌍(dyad) 누적 원장 — S0 기준선 |
 | slda-case-index | context | 사건 태그 인덱스·선례 검색·1회성/다회성 |
 | slda-report-html | render | 고정 CSS 스캐폴드 HTML/PDF |
+
+루브릭 레지스트리 R-01~R-13 = `rubrics.json` (레지스트리 v1.1). 1단 전처리 지시문 3종 = `preprocess/` (Edge Function 발급 전용). 내부 SPEC = `specs/`.
 
 로딩 순서: core → case-index → counterpart-ledger → (transcript) → 본체 모듈 1개 → 오버레이 → report-html
 

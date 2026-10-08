@@ -1,0 +1,136 @@
+{
+  "version": "1.1",
+  "date": "2026-09-09",
+  "source": "registry/rubric_registry_v1.1.md",
+  "rule": "5줄 루브릭(입력·산식·평가시점·구간화·표시) + 실데이터 검증 1회 → R-번호. 미검증은 RC-.",
+  "mirror_rule": "v1.1.4 인내 잔고 — registry/mirror_tolerance_balance_v1.1.3_review.md §9 산식. R-10 부호 전액 불변(계측층), 감경 여부는 모듈이 결정. dispute만 ⑥축 반영, controversy 표시만, litigation 보정 없음.",
+  "golden_cases": {
+    "dispute": "KT-2026-0908",
+    "controversy": "JS-2018-0406"
+  },
+  "rubrics": [
+    {
+      "code": "R-01",
+      "name": "표현강도 분석",
+      "owner": "core",
+      "skill": "slda-core"
+    },
+    {
+      "code": "R-02",
+      "name": "주체귀속 분석",
+      "owner": "core",
+      "skill": "slda-core"
+    },
+    {
+      "code": "R-03",
+      "name": "청구단위 원장 분석",
+      "owner": "dispute",
+      "skill": "slda-dispute"
+    },
+    {
+      "code": "R-04",
+      "name": "평가축 드리프트 분석",
+      "owner": "dispute",
+      "skill": "slda-dispute"
+    },
+    {
+      "code": "R-05",
+      "name": "프로브 검출 분석",
+      "owner": "probe",
+      "skill": "slda-probe"
+    },
+    {
+      "code": "R-06",
+      "name": "지칭 당위성 분석",
+      "owner": "dispute",
+      "skill": "slda-counterpart-ledger"
+    },
+    {
+      "code": "R-07",
+      "name": "발화 부인 분석",
+      "owner": "core",
+      "skill": "slda-core"
+    },
+    {
+      "code": "R-08",
+      "name": "검증 이벤트 분석",
+      "owner": "core",
+      "skill": "slda-core"
+    },
+    {
+      "code": "R-09",
+      "name": "사과 형식 분석",
+      "owner": "dispute",
+      "skill": "slda-dispute"
+    },
+    {
+      "code": "R-10",
+      "name": "동일지칭 기능·부호 분석",
+      "owner": "hub",
+      "skill": "slda-counterpart-ledger"
+    },
+    {
+      "code": "R-11",
+      "name": "종합 6축 채점",
+      "owner": "dispute",
+      "skill": "slda-dispute"
+    },
+    {
+      "code": "R-12",
+      "name": "어투·문체 드리프트 분석",
+      "owner": "stylistic-drift",
+      "skill": "slda-stylistic-drift"
+    },
+    {
+      "code": "R-13",
+      "name": "게이트·논증 품질 분석",
+      "owner": "controversy",
+      "skill": "slda-controversy"
+    }
+  ],
+  "by_module": {
+    "litigation": [
+      "R-01",
+      "R-02",
+      "R-07",
+      "R-08",
+      "R-10"
+    ],
+    "controversy": [
+      "R-01",
+      "R-02",
+      "R-07",
+      "R-08",
+      "R-10",
+      "R-13"
+    ],
+    "dispute": [
+      "R-01",
+      "R-02",
+      "R-03",
+      "R-04",
+      "R-06",
+      "R-07",
+      "R-08",
+      "R-09",
+      "R-10",
+      "R-11"
+    ],
+    "inquiry": [
+      "R-01",
+      "R-02",
+      "R-08"
+    ]
+  },
+  "overlay_rubrics": {
+    "slda-probe": [
+      "R-05"
+    ],
+    "slda-stylistic-drift": [
+      "R-12"
+    ],
+    "slda-ai-invocation": [
+      "R-10"
+    ]
+  }
+}
