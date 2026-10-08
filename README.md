@@ -2,6 +2,8 @@
 
 Soul Spectrum Inc. · 설계 맹난영 · 엔진 비종속(Claude / GPT / Gemini / Manus 공용 markdown)
 
+> **새 세션·다른 엔진은 여기서 시작:** `README.md` → `WORKLOG.md`(끝부분) → `manifest.json`. 커밋마다 WORKLOG 한 줄 동반. 로컬에서 한 작업(push·배포·설정)도 WORKLOG에 한 줄.
+
 `manifest.json`이 스킬 목록·로딩 순서·해시를 들고 있다. 다른 사이트/엔진은 raw URL로 SKILL.md를 그대로 가져가면 된다.
 
 | 스킬 | 계층 | 역할 |
@@ -34,7 +36,7 @@ https://raw.githubusercontent.com/maenglion/slda-skills/main/slda-litigation/SKI
 스킬은 2·3단 자산이라 프론트에 내려가지 않는다. Supabase Edge Function `slda-skills`가 서버 간 키(`x-slda-key`)로만 응답한다.
 
 ```
-GET  /slda-skills/manifest
+GET  /slda-skills/manifest        (배포 위치: homepage 프로젝트 nafpbwqdjxcftwfpadfr · 기존 slda-issue-prompt·slda-normalize 옆)
 GET  /slda-skills/skill/slda-litigation
 POST /slda-skills/dispatch   {"mod":"regulation","data_class":"public","output":"html","bundle":true}   ← 공개 트랙(첫 적용: letscheck-sinbo)
 POST /slda-skills/dispatch   {"mod":"litigation","sources":["소장","준비서면","제출명령"],"output":"html","bundle":true}
@@ -42,8 +44,9 @@ POST /slda-skills/dispatch   {"mod":"litigation","sources":["소장","준비서�
 ```
 `/dispatch`가 total_king: 메타로 어떤 자(스킬)를 댈지만 고른다. 채점 값은 건드리지 않는다. 규칙은 `dispatch.json`.
 
-배포:
+배포 (homepage 리포 루트에서):
 ```
+cp -r <slda-skills>/supabase/functions/slda-skills supabase/functions/   # + config.toml.snippet 병합
 supabase secrets set SLDA_API_KEY=... GH_TOKEN=... GH_REPO=maenglion/slda-skills GH_REF=main
 supabase functions deploy slda-skills --no-verify-jwt
 ```

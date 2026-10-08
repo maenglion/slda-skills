@@ -1,5 +1,7 @@
 // SLDA skills API — 서버 간 호출 전용 (§14: 2·3단 자산은 프론트에 내려가지 않는다)
-// Deploy: supabase functions deploy slda-skills --no-verify-jwt
+// Deploy: 이 폴더를 maenglion/homepage/supabase/functions/slda-skills/ 로 복사 후, homepage 루트에서
+//         supabase functions deploy slda-skills --no-verify-jwt   (프로젝트 nafpbwqdjxcftwfpadfr)
+// 1단 전처리 지시문은 여기서 내려주지 않는다 — slda-issue-prompt(DB slda_prompts) 가 담당 (homepage §14.4).
 // Secrets: SLDA_API_KEY (서버 간 공유키), GH_TOKEN (private repo raw 읽기), GH_REPO=maenglion/slda-skills, GH_REF=main
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 
@@ -35,7 +37,7 @@ function dispatch(d: any, m: { mod: string; data_class?: string; sources?: strin
   if (has(m.signals, "probe|repeat_question|silence")) order.push("slda-probe");
   if (has(m.flags, "style")) order.push("slda-stylistic-drift");
   if (/^(html|pdf)$/i.test(m.output ?? "")) order.push("slda-report-html");
-  return { order: [...new Set(order)], verdict_mode: mod.verdict_mode, data_class: pub ? "public" : "private", preprocess_directive: pub ? null : (d.preprocess_directive[m.mod] ?? null) };
+  return { order: [...new Set(order)], verdict_mode: mod.verdict_mode, data_class: pub ? "public" : "private", preprocess_directive: pub ? null : (d.preprocess_directive[m.mod] ?? null)  // 참고용 경로. 실제 발급은 slda-issue-prompt };
 }
 
 serve(async (req) => {
@@ -45,8 +47,6 @@ serve(async (req) => {
     if (p === "/manifest") return new Response(await raw("manifest.json"), { headers: { "content-type": "application/json" } });
     const m = p.match(/^\/skill\/(slda-[a-z-]+)$/);
     if (m) return new Response(await raw(`${m[1]}/SKILL.md`), { headers: { "content-type": "text/markdown; charset=utf-8" } });
-    const dm = p.match(/^\/directive\/(litigation|controversy|speaker)$/);   // 1단 유저 프롬프트 발급 (SPEC §14.4)
-    if (dm) return new Response(await raw(`preprocess/directive_${dm[1]}_v1.md`), { headers: { "content-type": "text/markdown; charset=utf-8", "x-slda-directive-version": "v1" } });
     if (p === "/rubrics") return new Response(await raw("rubrics.json"), { headers: { "content-type": "application/json" } });
     if (p === "/dispatch" && req.method === "POST") {
       const meta = await req.json(); const d = JSON.parse(await raw("dispatch.json")); const R = JSON.parse(await raw("rubrics.json"));
@@ -56,6 +56,6 @@ serve(async (req) => {
       const bundle = meta.bundle ? (await Promise.all(plan.order.map(s => raw(`${s}/SKILL.md`)))).join("\n\n---\n\n") : undefined;
       return json({ ...plan, dispatch_version: d.version, bundle });
     }
-    return json({ error: "not found", routes: ["GET /manifest", "GET /rubrics", "GET /skill/:name", "GET /directive/:model", "POST /dispatch {mod,sources,signals,flags,pair_id,output,bundle}"] }, 404);
+    return json({ error: "not found", routes: ["GET /manifest", "GET /rubrics", "GET /skill/:name", "POST /dispatch {mod,sources,signals,flags,pair_id,output,bundle}"] }, 404);
   } catch (e) { return json({ error: String(e) }, 500); }
 });
