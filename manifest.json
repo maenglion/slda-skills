@@ -1,6 +1,6 @@
 {
   "name": "slda-skills",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "publisher": "Soul Spectrum Inc.",
   "rubrics": "rubrics.json",
   "dispatch": "dispatch.json",
@@ -35,6 +35,19 @@
       "requires": [
         "slda-core"
       ]
+    },
+    {
+      "name": "slda-regulation",
+      "path": "slda-regulation/SKILL.md",
+      "description": "SLDA 공개 법령·규정 추적 모듈. 법령·시행령·고시·기관 내부규정(공개본)의 개정 이력을 시간순으로 넣으면 조문 단위 변경 원장(신설·삭제·개정·이동) → 의무·권한·요건의 표현강도 변화 → 주체귀속 이동(누가 의무자·결정권자인가) → 공개현황 갭(제정·개정 대비 공개·미공개) → 참조 무결성(인용 조문 실재 여부)을 산출한다. 개인정보 없음(data_class=public) 트랙 전용 — 전처리 지시문·마스킹 게이트를 거치지 않는다. \"법령 추적\", \"규정 개정 이력\", \"조문 변경\", \"공개현황\", \"신보 규정\", \"고시 바뀐 데\", \"개정 전후 비교\", \"인용 조문 확인\" 이 나오면 반드시 사용. slda-core 선행 로드.",
+      "sha256": "09481a205ade",
+      "bytes": 4667,
+      "references": [],
+      "tier": "module",
+      "requires": [
+        "slda-core"
+      ],
+      "data_class": "public"
     },
     {
       "name": "slda-inquiry",

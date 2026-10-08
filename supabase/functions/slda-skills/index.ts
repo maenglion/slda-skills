@@ -20,19 +20,22 @@ async function raw(path: string): Promise<string> {
 const json = (o: unknown, s = 200) => new Response(JSON.stringify(o), { status: s, headers: { "content-type": "application/json; charset=utf-8" } });
 
 // total_king: 메타 → 스킬 배치 (결정적). 점수 없음.
-function dispatch(d: any, m: { mod: string; sources?: string[]; signals?: string[]; flags?: string[]; pair_id?: string; output?: string }) {
+function dispatch(d: any, m: { mod: string; data_class?: string; sources?: string[]; signals?: string[]; flags?: string[]; pair_id?: string; output?: string }) {
   const has = (arr: string[] | undefined, pat: string) => (arr ?? []).some(s => new RegExp(pat, "i").test(s));
-  const order: string[] = [...d.always_first, d.context.case_index];
-  if (m.pair_id) order.push(d.context.counterpart_ledger.skill);
+  const pub = m.data_class === "public";
+  const order: string[] = [...d.always_first];
+  if (!pub) { order.push(d.context.case_index); if (m.pair_id) order.push(d.context.counterpart_ledger.skill); }
   if (has(m.sources, "call|audio|stt|통화")) order.push("slda-transcript");
   const mod = d.modules[m.mod]; if (!mod) throw new Error(`unknown mod: ${m.mod}`);
+  if (pub && !d.data_class.public_modules.includes(m.mod)) throw new Error(`mod ${m.mod} is not a public-track module`);
+  if (!pub && mod.data_class === "public") throw new Error(`mod ${m.mod} requires data_class=public (no PII input)`);
   order.push(mod.skill);
   for (const s of mod.sub ?? []) if (has(m.sources, "신청서|제출명령|사실조회|과세정보|금융거래")) order.push(s.skill);
   if (has(m.signals, "ai_mention") && ["controversy", "dispute"].includes(m.mod)) order.push("slda-ai-invocation");
   if (has(m.signals, "probe|repeat_question|silence")) order.push("slda-probe");
   if (has(m.flags, "style")) order.push("slda-stylistic-drift");
   if (/^(html|pdf)$/i.test(m.output ?? "")) order.push("slda-report-html");
-  return { order: [...new Set(order)], verdict_mode: mod.verdict_mode };
+  return { order: [...new Set(order)], verdict_mode: mod.verdict_mode, data_class: pub ? "public" : "private", preprocess_directive: pub ? null : (d.preprocess_directive[m.mod] ?? null) };
 }
 
 serve(async (req) => {

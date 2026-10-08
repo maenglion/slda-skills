@@ -15,6 +15,7 @@ description: SLDA(Semantic Logic Drift Analysis, 의미·논리 드리프트 분
 | 유사 선례 검색·1회성/다회성 판정·패턴 확정 | `slda-case-index` (전·후 공통) | 태그 택소노미·cases.jsonl·선례 참조 블록 |
 | 같은 상대와 반복되는 분쟁의 사전 맥락 | `slda-counterpart-ledger` (기준선 S0) | 관계 계약·합의·금지선·미결·회복 신호 누적 |
 | 통화·회의 녹음 STT 결과 | `slda-transcript` (전처리) | 교정 대조표·신뢰도 고지·귀속 등급 A/B/MIXED |
+| 공개 법령·규정 개정 이력(개인정보 없음) | `slda-regulation` (data_class=public) | 조문 변경 원장·강도 사다리 이동·공개현황 갭·참조 무결성 |
 | 소송 서면·신청서 묶음(시간순) | `slda-litigation` | 프레임·표현강도·귀속 시계열 + 전제충돌 |
 | SNS·커뮤니티 다자 논쟁(게시글·댓글·인용문서) | `slda-controversy` | 게이트 채점·E1–E6·후퇴 벡터·전제충돌 |
 | 문서제출명령·금융/과세정보·사실조회 신청서 묶음 | `slda-inquiry` | 결합 단위·침해 강도축 0–5·D-01~05·법적 등급표 |

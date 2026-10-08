@@ -1,6 +1,6 @@
 {
   "_doc": "total_king 라우팅 규칙. 입력 메타(mod · 자료 유형 · 신호)로 어떤 자(스킬)를 댈지 고른다. 점수는 건드리지 않는다. 규칙은 결정적 — 같은 메타면 같은 배치.",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "always_first": [
     "slda-core"
   ],
@@ -58,6 +58,15 @@
         "mod": "inquiry"
       },
       "verdict_mode": "determine"
+    },
+    "regulation": {
+      "skill": "slda-regulation",
+      "match": {
+        "mod": "regulation",
+        "data_class": "public"
+      },
+      "verdict_mode": "observe",
+      "data_class": "public"
     }
   },
   "overlays": [
@@ -95,5 +104,20 @@
     "controversy": "preprocess/directive_controversy_v1.md",
     "speaker": "preprocess/directive_speaker_v1.md",
     "_doc": "1단 유저 프롬프트(라벨화·마스킹·병합만). SPEC §14.4: 접수 세션 유저에게 Edge Function으로 발급, 프론트 하드코딩 금지"
+  },
+  "data_class": {
+    "_doc": "public = 공개 문서만, 개인정보 없음 → 전처리 지시문·마스킹 게이트 생략. private(기본) = SPEC §14 1단 지시문 발급 + 접수 필터 필수.",
+    "public_modules": [
+      "regulation"
+    ],
+    "public_overlays": [
+      "slda-stylistic-drift"
+    ],
+    "public_skip": [
+      "preprocess_directive",
+      "mask_gate",
+      "slda-counterpart-ledger",
+      "slda-case-index"
+    ]
   }
 }

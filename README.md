@@ -8,6 +8,7 @@ Soul Spectrum Inc. · 설계 맹난영 · 엔진 비종속(Claude / GPT / Gemini
 |---|---|---|
 | slda-core | core | 공통 규약: 금지선·척도·선처리 필드·drift 어휘·verdict_mode·상태표 |
 | slda-litigation | module | 소송 서면 시계열 — 프레임 히트맵·표현강도·귀속·PC·편 분리 |
+| slda-regulation | module · **public** | 공개 법령·규정 개정 추적 — 조문 변경 원장·강도 이동·공개현황 갭·참조 무결성 (전처리 게이트 없음) |
 | slda-inquiry | module | 증거신청·정보조회 확장 — 결합 단위·침해 강도축·D-01~05 |
 | slda-controversy | module | SNS 다자 논쟁 — 게이트·E1–E6·후퇴 벡터·PC |
 | slda-dispute | module | 1:1 계약·외주 분쟁 — 청구단위 원장·객체 계층·의도/전달·적대검증 |
@@ -35,6 +36,7 @@ https://raw.githubusercontent.com/maenglion/slda-skills/main/slda-litigation/SKI
 ```
 GET  /slda-skills/manifest
 GET  /slda-skills/skill/slda-litigation
+POST /slda-skills/dispatch   {"mod":"regulation","data_class":"public","output":"html","bundle":true}   ← 공개 트랙(첫 적용: letscheck-sinbo)
 POST /slda-skills/dispatch   {"mod":"litigation","sources":["소장","준비서면","제출명령"],"output":"html","bundle":true}
      → {"order":[...], "verdict_mode":"determine", "bundle":"<SKILL.md 연결본>"}
 ```
