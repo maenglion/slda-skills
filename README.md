@@ -47,6 +47,6 @@ POST /slda-skills/dispatch   {"mod":"litigation","sources":["소장","준비서�
 배포 (homepage 리포 루트에서):
 ```
 cp -r <slda-skills>/supabase/functions/slda-skills supabase/functions/   # + config.toml.snippet 병합
-supabase secrets set SLDA_API_KEY=... GH_TOKEN=... GH_REPO=maenglion/slda-skills GH_REF=main
+supabase secrets set slda_api_key=... gh_token=... gh_repo=maenglion/slda-skills gh_ref=main
 supabase functions deploy slda-skills --no-verify-jwt
 ```
