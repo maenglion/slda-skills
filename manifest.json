@@ -1,0 +1,135 @@
+{
+  "name": "slda-skills",
+  "version": "1.4.0",
+  "publisher": "Soul Spectrum Inc.",
+  "load_order": [
+    "slda-core",
+    "slda-case-index",
+    "slda-counterpart-ledger",
+    "slda-transcript",
+    "<module>",
+    "<overlay>",
+    "slda-report-html"
+  ],
+  "skills": [
+    {
+      "name": "slda-core",
+      "path": "slda-core/SKILL.md",
+      "description": "SLDA(Semantic Logic Drift Analysis, 의미·논리 드리프트 분석)의 공통 규약. 다른 모든 slda-* 모듈이 이 스킬을 먼저 로드한다. 비정형 텍스트(소송 서면·SNS 논쟁·메신저·통화 전사·계약 협상)에서 전제·주장·귀속·표현강도의 시계열 이동을 채점하는 작업이면 반드시 이 스킬을 읽는다. \"SLDA\", \"드리프트 분석\", \"전제충돌\", \"표현강도\", \"주체귀속\", \"논리 정합성 채점\", \"claim_units\", \"마스터원장\" 중 하나라도 나오면 트리거한다. 어떤 엔진(Claude·GPT·Gemini·Manus 등)에서 실행되든 동일 입력→동일 산출을 목표로 한다.",
+      "sha256": "b4e40971af29",
+      "bytes": 12950,
+      "tier": "core",
+      "requires": []
+    },
+    {
+      "name": "slda-litigation",
+      "path": "slda-litigation/SKILL.md",
+      "description": "SLDA 리티게이션 모듈. 소송 서면(소장·답변서·준비서면·신청서·의견서)을 시간순으로 넣으면 진영별 표현강도(0–100)·쟁점 프레임 히트맵·주체귀속 이동·전제충돌(PC)·제3자 자료조회 확장을 문장 단위로 채점한다. \"서면 분석\", \"준비서면 드리프트\", \"원고 주장 변화\", \"소외인편/피고편 리포트\", \"형사 프레임 전환\", \"지칭 문장 카운트\", \"claim_units_scored\", \"마스터원장\" 이 나오면 반드시 사용. slda-core를 먼저 로드한다.",
+      "sha256": "55ff6e694198",
+      "bytes": 6397,
+      "tier": "module",
+      "requires": [
+        "slda-core"
+      ]
+    },
+    {
+      "name": "slda-report-html",
+      "path": "slda-report-html/SKILL.md",
+      "description": "SLDA 분석 산출물을 Soul Spectrum 고정 스캐폴드(Pretendard·A4 페이지·색 램프 b0–b4·전용 class)의 단일 HTML 리포트로 렌더링하고 필요 시 PDF로 변환한다. \"SLDA 리포트 만들어\", \"HTML로 뽑아\", \"피고편/소외인편 리포트\", \"송도 리포트 형식으로\", \"기존 CSS 스캐폴드 재사용\", \"PDF로\" 가 나오면 반드시 사용. 새 class를 만들지 않고 assets/scaffold.css 만 쓴다. 분석 모듈(slda-litigation/controversy/dispute) 산출이 먼저 있어야 한다.",
+      "sha256": "7a0422421c60",
+      "bytes": 5205,
+      "tier": "render",
+      "requires": [
+        "slda-core"
+      ]
+    },
+    {
+      "name": "slda-inquiry",
+      "path": "slda-inquiry/SKILL.md",
+      "description": "SLDA 정보조회 확장 모듈(리티게이션 §6.5 Third-party Inquiry Expansion 전용 분리판). 소송에서 한쪽이 낸 문서제출명령·금융거래정보 제출명령·과세정보 제출명령·사실조회촉탁 신청서 묶음을 시간순으로 넣으면 각 신청을 `대상자–정보종류–기간–입증명제–법적 평가어–요구범위` 결합 단위로 분해하고, 침해 강도축(0–5)·시간축 드리프트(D-nn)·확인형↔단정형 병존·범위 비대칭·법적 판정 등급표·재판부 제시용 압축 논지를 산출한다. \"제출명령 분석\", \"사실조회 신청 분석\", \"금융정보 제출명령\", \"과세정보 제출명령\", \"탐색적 증거신청\", \"비례성 반박\", \"최소수집\", \"비당사자 자료 요구\", \"정보조회 시간축\" 이 나오면 반드시 사용. slda-core 선행 로드.",
+      "sha256": "618ba1c2e550",
+      "bytes": 6923,
+      "tier": "module",
+      "requires": [
+        "slda-core"
+      ]
+    },
+    {
+      "name": "slda-controversy",
+      "path": "slda-controversy/SKILL.md",
+      "description": "SLDA Controversy 모듈. SNS·커뮤니티·메신저 다자 논쟁(게시글·댓글·인용된 보고서·DM)을 넣으면 게이트(사건정의 일치) 채점 → E1–E6 논증 품질 점수 → 전진/후퇴/귀류(ADV·RET·FIX·RDX) 후퇴 벡터 → 전제충돌 PC → 가설 판정 레인 → 상태표를 산출한다. \"SNS 논쟁 분석\", \"댓글 논쟁 채점\", \"게이트 채점\", \"후퇴 벡터\", \"귀류\", \"E1~E6\", \"문서와 인용자 분리\", \"송도 사전투표 논쟁\" 류가 나오면 반드시 사용. slda-core 선행 로드. AI 원용이 있으면 slda-ai-invocation 오버레이.",
+      "sha256": "697494ad52e6",
+      "bytes": 7220,
+      "tier": "module",
+      "requires": [
+        "slda-core"
+      ]
+    },
+    {
+      "name": "slda-dispute",
+      "path": "slda-dispute/SKILL.md",
+      "description": "SLDA Dispute 모듈. 1:1 계약·외주·정산·R&R 분쟁을 통화 전사·메신저·이메일·검증기록 묶음으로 넣으면 자료 신뢰도 표 → 청구단위(claim unit) 원장(주장강도 0–4·증거자세 6종·drift 유형) → 객체 계층 분리 → R&R 기준선 → 의도 vs 전달 분리 → 증거 치환 → 검증 비대칭·직접상충 → 상태 귀속 시간확장 → 적대검증 → 최종 판정 + 타 엔진용 컨텍스트 앵커를 산출한다. \"외주 분쟁\", \"정산 분쟁\", \"책임 귀속\", \"R&R 기준선\", \"통화 전사 분석\", \"카톡 분쟁 분석\", \"누가 뭘 뜻했는지 vs 뭐라고 말했는지\", \"증거 치환\", \"적대검증\" 이 나오면 반드시 사용. slda-core 선행 로드.",
+      "sha256": "fb448c74575a",
+      "bytes": 7428,
+      "tier": "module",
+      "requires": [
+        "slda-core"
+      ]
+    },
+    {
+      "name": "slda-ai-invocation",
+      "path": "slda-ai-invocation/SKILL.md",
+      "description": "SLDA §C3 AI 원용 추적 오버레이. 논쟁·분쟁 텍스트에서 화자가 AI(GPT·Gemini·Grok·Claude 등)·전문가·기사·본인 모델을 권위로 소환하는 행위를 7신호(INVOKE·CONTAMINATE·POSSESS·MISMATCH·DISQUALIFY·LAUNDER·DEMAND)로 태깅하고 INVOKE_MODE(explore/assert)와 stance(confirmatory/adversarial)를 부착한다. \"AI 딸깍\", \"내 GPT\", \"네 AI가 편향\", \"AI한테 물어보니\", \"5개 AI가 동일\", \"AI가 써준 걸\", \"이거 AI에 넣어봐\" 류 발화가 있으면 반드시 이 오버레이를 적용. slda-core 선행, slda-controversy 또는 slda-dispute 위에 얹는다.",
+      "sha256": "5aae0c5d3abe",
+      "bytes": 5423,
+      "tier": "overlay",
+      "requires": [
+        "slda-core"
+      ]
+    },
+    {
+      "name": "slda-stylistic-drift",
+      "path": "slda-stylistic-drift/SKILL.md",
+      "description": "SLDA §6.5 어투·문체 드리프트 오버레이. 한 화자(또는 한 주체의 문서 묶음)의 문장 구조·어투·정제도가 시간·구간에 따라 어떻게 이동하는지를 기계적 지표 6종(claim 밀도·주어–술어 거리·명사화율·단정/완곡 비율·주체 혼입도·인칭 이동)으로 산출하고 변곡점 타임라인과 표현강도 오버레이를 만든다. \"어투 변화\", \"문체 바뀜\", \"대필 의심\", \"AI로 쓴 것 같다\", \"1인칭에서 3인칭으로\", \"완곡체로 바뀜\", \"정제도\" 류가 나오면 반드시 사용하되 원인·진위·의도는 절대 산출하지 않는다. slda-core 선행 로드.",
+      "sha256": "735081de02f8",
+      "bytes": 4272,
+      "tier": "overlay",
+      "requires": [
+        "slda-core"
+      ]
+    },
+    {
+      "name": "slda-transcript",
+      "path": "slda-transcript/SKILL.md",
+      "description": "SLDA 전사(transcript) 전처리 모듈. 통화·회의 녹음의 STT 결과(WhisperX 등)를 분석 가능한 사실자료로 만든다 — 오디오 품질 검사 → 화자 매핑(호칭 앵커) → 용어집 교정 → 교정 대조표(원문/교정/규칙ID) 저장 → 전사 신뢰도 고지 → 발화 귀속 등급 → 타임코드 앵커. \"통화 전사\", \"전사 교정\", \"STT 오류\", \"화자 분리\", \"누가 말한 건지\", \"전사 신뢰도\", \"통화록\", \"회의록 만들어\", \"타임코드 인용\" 이 나오면 반드시 사용. slda-dispute·slda-controversy가 통화 자료를 쓸 때 이 스킬을 먼저 통과시킨다. slda-core 선행 로드.",
+      "sha256": "0e6884ee93e5",
+      "bytes": 5642,
+      "tier": "preprocess",
+      "requires": [
+        "slda-core"
+      ]
+    },
+    {
+      "name": "slda-counterpart-ledger",
+      "path": "slda-counterpart-ledger/SKILL.md",
+      "description": "SLDA 상대별 누적 원장(counterpart ledger). 같은 상대와 반복되는 분쟁·협상에서 \"싸움 이전 맥락\"(관계 계약 다중성·확인된 R&R 합의·반복 발화 형식·트리거·회복 신호·미결·합의된 금지선·정산 규칙)을 상대 1인당 1파일로 누적하고, 새 분쟁 분석 시 slda-dispute/controversy의 기준선(S0)으로 먼저 주입한다. \"정민하 원장\", \"그 사람이랑 또 싸웠어\", \"지난번에 합의했던 거\", \"이전 맥락 넣고 분석\", \"상대 프로파일\", \"누적 저장\", \"관계 잘 유지하려면\", \"재발 방지\" 류가 나오면 반드시 사용. slda-core 선행 로드. 사람을 채점하지 않는다 — 발화·합의·이력만 저장한다.",
+      "sha256": "aa7cadb89342",
+      "bytes": 8538,
+      "tier": "context",
+      "requires": [
+        "slda-core"
+      ]
+    },
+    {
+      "name": "slda-case-index",
+      "path": "slda-case-index/SKILL.md",
+      "description": "SLDA 사건 인덱스·선례 검색. 모든 SLDA 분석(litigation·controversy·dispute·inquiry)이 끝날 때 고정 택소노미로 태그를 뽑아 case card(JSONL 1행)로 누적하고, 새 분석 착수 시 태그 겹침으로 유사 선례를 검색해 리포트에 \"선례 참조\" 블록을 넣는다. 같은 상대의 누적 건수로 1회성/다회성을 판정하고, 패턴은 선례 N건 이상일 때만 확정한다. \"비슷한 케이스 있었나\", \"전에도 이랬지\", \"선례\", \"이런 패턴 몇 번째\", \"1회성인지 반복인지\", \"태그 뽑아\", \"케이스 인덱스\", \"레퍼런스 붙여\" 가 나오면 반드시 사용. slda-core 선행 로드.",
+      "sha256": "107b3e675a3e",
+      "bytes": 6803,
+      "tier": "context",
+      "requires": [
+        "slda-core"
+      ]
+    }
+  ]
+}
